@@ -13,7 +13,7 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 Values are **bundled at build time** — change the JSON, then rebuild.
 
 ```zsh
-git clone https://github.com/YOUR_USER/NotionistWidget.git
+git clone https://github.com/kingtochan/NotionistWidget.git
 cd NotionistWidget
 # edit Shared/WidgetConfig.json, then build below
 ```
