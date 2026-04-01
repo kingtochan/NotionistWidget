@@ -1,0 +1,14 @@
+{
+  "notion": {
+    "token": "YOUR_NOTION_TOKEN_HERE",
+    "databaseId": "YOUR_DATABASE_ID_HERE",
+    "apiVersion": "2022-06-28"
+  },
+  "widget": {
+    "title": "Notionist Widget",
+    "backgroundColorHex": "#EBEBF0",
+    "maxItemsMedium": 4,
+    "maxItemsLarge": 8,
+    "listStyle": "bullet"
+  }
+}

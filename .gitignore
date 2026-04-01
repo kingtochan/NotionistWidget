@@ -1,0 +1,10 @@
+*.app
+*.appex
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+DerivedData/
+build/
+*.moved-aside
+.DS_Store

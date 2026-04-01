@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A5A64105080292E58174739 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F404328B668C02151BF6DC3 /* TimelineItem.swift */; };
+		16B3719ABD60507AD39CF010 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F404328B668C02151BF6DC3 /* TimelineItem.swift */; };
+		667E9060AD16BF167D740ABC /* NotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC538E39A2977C0409B27E /* NotionService.swift */; };
+		8FBB321F50C2FF24D153DFA6 /* NotionistWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */; };
+		A0B1C2D3E4F5010203040508 /* WidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */; };
+		A0B1C2D3E4F5010203040509 /* WidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */; };
+		A0B1C2D3E4F501020304050A /* WidgetConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5010203040507 /* WidgetConfig.json */; };
+		A0B1C2D3E4F501020304050B /* WidgetConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5010203040507 /* WidgetConfig.json */; };
+		CF16B126CB9F9BFE81C7C7DA /* NotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC538E39A2977C0409B27E /* NotionService.swift */; };
+		EA552A084DFA7D4F97DD648A /* NotionistWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F6068EB4E3F0F8AA4B18F587 /* NotionistWidgetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D9933EE6BB3FB9B11179D9AF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 36CADCD528453C2A5B1B0148 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F57E1932DE469D50F3BD5766;
+			remoteInfo = NotionistWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E3637A1737302A7806EFBFDB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EA552A084DFA7D4F97DD648A /* NotionistWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionistWidgetApp.swift; sourceTree = "<group>"; };
+		40EC538E39A2977C0409B27E /* NotionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionService.swift; sourceTree = "<group>"; };
+		56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionistWidget.swift; sourceTree = "<group>"; };
+		5F404328B668C02151BF6DC3 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetConfig.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5010203040507 /* WidgetConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WidgetConfig.json; sourceTree = "<group>"; };
+		AB62090427D479E62994D1B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F1A2B3C4D5E6789012345678 /* NotionistWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotionistWidget.entitlements; sourceTree = "<group>"; };
+		CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotionistWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA7002E15D4B23C118E64DF5 /* NotionistWidgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotionistWidgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		06D4AD1A2294C38E6A3F715B /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				40EC538E39A2977C0409B27E /* NotionService.swift */,
+				5F404328B668C02151BF6DC3 /* TimelineItem.swift */,
+				A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */,
+				A0B1C2D3E4F5010203040507 /* WidgetConfig.json */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		5781D34D71AC8D8E39E06A0B = {
+			isa = PBXGroup;
+			children = (
+				06D4AD1A2294C38E6A3F715B /* Shared */,
+				B243A5446D2809755EC1963E /* Sources */,
+				5CD3B63B444FD6A04332DBDB /* WidgetExtension */,
+				DE17986E63F5276215B6C980 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5CD3B63B444FD6A04332DBDB /* WidgetExtension */ = {
+			isa = PBXGroup;
+			children = (
+				AB62090427D479E62994D1B7 /* Info.plist */,
+				F1A2B3C4D5E6789012345678 /* NotionistWidget.entitlements */,
+				56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */,
+			);
+			path = WidgetExtension;
+			sourceTree = "<group>";
+		};
+		B243A5446D2809755EC1963E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */,
+			);
+			name = Sources;
+			path = NotionistWidgetApp/Sources;
+			sourceTree = "<group>";
+		};
+		DE17986E63F5276215B6C980 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */,
+				EA7002E15D4B23C118E64DF5 /* NotionistWidgetApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BC2AD0A420601E2E62567317 /* NotionistWidgetApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D710D7C3D17091B2A0E3BFDD /* Build configuration list for PBXNativeTarget "NotionistWidgetApp" */;
+			buildPhases = (
+				FD3F5B1C853EF490131EF2DE /* Sources */,
+				A0B1C2D3E4F501020304050C /* Resources */,
+				E3637A1737302A7806EFBFDB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C643E59473831B1D49DE0F58 /* PBXTargetDependency */,
+			);
+			name = NotionistWidgetApp;
+			packageProductDependencies = (
+			);
+			productName = NotionistWidgetApp;
+			productReference = EA7002E15D4B23C118E64DF5 /* NotionistWidgetApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F57E1932DE469D50F3BD5766 /* NotionistWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24F38DE65542F62048072CA7 /* Build configuration list for PBXNativeTarget "NotionistWidgetExtension" */;
+			buildPhases = (
+				D8296BBE4B386CF5716A6488 /* Sources */,
+				A0B1C2D3E4F501020304050D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotionistWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = NotionistWidgetExtension;
+			productReference = CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		36CADCD528453C2A5B1B0148 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					BC2AD0A420601E2E62567317 = {
+						ProvisioningStyle = Automatic;
+					};
+					F57E1932DE469D50F3BD5766 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A82EF27624DDDC3870621354 /* Build configuration list for PBXProject "NotionistWidget" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5781D34D71AC8D8E39E06A0B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DE17986E63F5276215B6C980 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F57E1932DE469D50F3BD5766 /* NotionistWidgetExtension */,
+				BC2AD0A420601E2E62567317 /* NotionistWidgetApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A0B1C2D3E4F501020304050C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0B1C2D3E4F501020304050A /* WidgetConfig.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0B1C2D3E4F501020304050D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0B1C2D3E4F501020304050B /* WidgetConfig.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8296BBE4B386CF5716A6488 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF16B126CB9F9BFE81C7C7DA /* NotionService.swift in Sources */,
+				8FBB321F50C2FF24D153DFA6 /* NotionistWidget.swift in Sources */,
+				16B3719ABD60507AD39CF010 /* TimelineItem.swift in Sources */,
+				A0B1C2D3E4F5010203040509 /* WidgetConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD3F5B1C853EF490131EF2DE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				667E9060AD16BF167D740ABC /* NotionService.swift in Sources */,
+				F6068EB4E3F0F8AA4B18F587 /* NotionistWidgetApp.swift in Sources */,
+				0A5A64105080292E58174739 /* TimelineItem.swift in Sources */,
+				A0B1C2D3E4F5010203040508 /* WidgetConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C643E59473831B1D49DE0F58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F57E1932DE469D50F3BD5766 /* NotionistWidgetExtension */;
+			targetProxy = D9933EE6BB3FB9B11179D9AF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		44E44ED3694FEBD913A28655 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/NotionistWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget.app.widget;
+				PRODUCT_NAME = NotionistWidgetExtension;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4DC021E191B2210E6A98FCBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = NotionistWidgetApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget.app;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A67EDDB9EE3FD31724727122 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		A9D078A14846575F9A8DFB85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		B3646D093764F43018F40A57 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = NotionistWidgetApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget.app;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E6C78C880EDF8DAFF9074F08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = WidgetExtension/NotionistWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = WidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.notionistwidget.app.widget;
+				PRODUCT_NAME = NotionistWidgetExtension;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		24F38DE65542F62048072CA7 /* Build configuration list for PBXNativeTarget "NotionistWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6C78C880EDF8DAFF9074F08 /* Debug */,
+				44E44ED3694FEBD913A28655 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A82EF27624DDDC3870621354 /* Build configuration list for PBXProject "NotionistWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9D078A14846575F9A8DFB85 /* Debug */,
+				A67EDDB9EE3FD31724727122 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D710D7C3D17091B2A0E3BFDD /* Build configuration list for PBXNativeTarget "NotionistWidgetApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DC021E191B2210E6A98FCBF /* Debug */,
+				B3646D093764F43018F40A57 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 36CADCD528453C2A5B1B0148 /* Project object */;
+}
