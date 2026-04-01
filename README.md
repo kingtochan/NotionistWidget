@@ -10,6 +10,8 @@ This project is distributed as source only. There is no prebuilt `.app`.
 
 The widget is configured before build time through a bundled JSON file, so it does not depend on App Groups or runtime settings sharing between the app and widget.
 
+The Xcode project is already configured to use local ad hoc signing, shown by Xcode as **Sign to Run Locally**. You do not need to add an Apple Developer team for the default local build flow.
+
 ---
 
 ## Build from Source
@@ -56,19 +58,18 @@ Open `Config/widget-config.json` and fill in your values before building:
 
 ### Step 3 — Build and run
 
-**Option A — Xcode**
-
 1. Open `NotionistWidget.xcodeproj` in Xcode.
-2. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
-3. Build and run.
-4. If you move the app to `/Applications`, launch it once from there.
-5. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
+2. Leave the signing settings as they are. The project is already set up for local **Sign to Run Locally** signing.
+3. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
+4. Build and run once from Xcode.
+5. In Xcode, choose **Product** → **Show Build Folder in Finder**.
+6. Move `NotionistWidgetApp.app` to `/Applications`.
+7. Launch the app once from `/Applications`.
+8. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
 
 If you change `widget-config.json`, rebuild the app so the updated config is bundled into the widget.
 
-Use the Xcode-built app for real installation and widget registration. A compile-only command-line build with `CODE_SIGNING_ALLOWED=NO` is useful for verification, but macOS may not register its widget extension in the widget gallery.
-
-**Option B — Command line verification build**
+### Optional — Command line verification build
 
 ```zsh
 xcodebuild \
@@ -80,7 +81,7 @@ xcodebuild \
   build
 ```
 
-This command is mainly useful to verify that the project compiles. For actual widget installation and discovery in **Edit Widgets**, use the Xcode-built app from Option A.
+This command is mainly useful to verify that the project compiles. For actual widget installation and discovery in **Edit Widgets**, use the Xcode-built app from the steps above.
 
 ---
 
@@ -169,7 +170,9 @@ Supported names:
 
 - If the widget shows an error, double-check `widget-config.json` and confirm the Notion integration can access the target database.
 - This setup avoids App Groups, which makes the project easier to build without paid Apple Developer capabilities.
-- If the widget does not appear in **Edit Widgets**, rebuild from Xcode, launch the built app once, and make sure the app bundle contains `Contents/PlugIns/NotionistWidgetExtension.appex`.
+- The project is intended to build locally without an Apple Developer team. The default signing identity is local ad hoc signing.
+- If the widget does not appear in **Edit Widgets**, rebuild from Xcode, launch the app once from `/Applications`, and make sure the app bundle contains `Contents/PlugIns/NotionistWidgetExtension.appex`.
+- If you use a custom Derived Data location, avoid building into a synced or metadata-heavy folder. A clean local build location works best for signing.
 
 ---
 

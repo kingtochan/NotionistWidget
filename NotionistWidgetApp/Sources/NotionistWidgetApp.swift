@@ -47,16 +47,19 @@ struct SetupView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("1. Edit `Config/widget-config.json` in the project.")
                         Text("2. Put in your Notion token, database ID, and display options.")
-                        Text("3. Build and run the `NotionistWidgetApp` target from Xcode.")
-                        Text("4. If you move the app to `/Applications`, launch it once from there.")
-                        Text("5. Add or refresh the widget on your desktop.")
+                        Text("3. Open the project in Xcode and leave signing as `Sign to Run Locally`.")
+                        Text("4. Build and run the `NotionistWidgetApp` target once.")
+                        Text("5. Move the built app to `/Applications` and launch it once from there.")
+                        Text("6. Add or refresh the widget on your desktop.")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
                 GroupBox("Widget Registration") {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("For the widget to appear in Edit Widgets, use the Xcode-built app.")
+                        Text("No Apple Developer team is required for the default local build flow.")
+                        Text("This project is configured for Xcode's local `Sign to Run Locally` signing.")
+                        Text("For the widget to appear in Edit Widgets, use the Xcode-built app and launch it once from `/Applications` after copying it there.")
                         Text("A compile-only build made with `CODE_SIGNING_ALLOWED=NO` is useful for verification, but macOS may not register its widget extension for the gallery.")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
