@@ -29,7 +29,7 @@ No pre-built binary is provided. This project is designed to be built from sourc
 3. Press **⌘R** (Product → Run).
 4. Once running, add **Notionist Widget** from the desktop via **Edit Widgets**.
 
-To keep the widget after Xcode is closed, drag the built `.app` from the **Products** group in the Project Navigator to `/Applications`, then launch it once from there.
+To keep the widget after Xcode is closed, drag the built `.app` from the **Products** group in the Project Navigator (Product → Show Build Folder) to `/Applications`, then launch it once from there.
 
 ### Option B — Command line (requires `xcodegen` from `brew install`)
 
@@ -42,7 +42,7 @@ xcodebuild \
   build
 ```
 
-The `.app` is written to Xcode's DerivedData folder (not included in this repo).
+The `.app` is written to Xcode's DerivedData folder.
 ## Feedback and Contribution
 
 This is intended to be a small modular tool to help the Notion community. Any feedback is welcomed. To suggest changes, simply submit a pull request for your commit.
