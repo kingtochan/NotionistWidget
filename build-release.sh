@@ -11,6 +11,10 @@ DERIVED_DATA="build/DerivedData"
 PRODUCTS="$DERIVED_DATA/Build/Products/Release"
 INTERMEDIATES="$DERIVED_DATA/Build/Intermediates.noindex/NotionistWidget.build/Release"
 
+# Source entitlements files (always available, used as fallback)
+APPEX_ENT_SRC="WidgetExtension/NotionistWidget.entitlements"
+APP_ENT_SRC="NotionistWidgetApp/NotionistWidgetApp.entitlements"
+
 echo "→ Cleaning previous build..."
 rm -rf "$DERIVED_DATA"
 
@@ -32,31 +36,39 @@ xcodebuild \
 echo "→ Stripping extended attributes from build products..."
 xattr -cr "$PRODUCTS"
 
-APPEX="$PRODUCTS/NotionistWidgetExtension.appex"
 APP="$PRODUCTS/NotionistWidgetApp.app"
 EMBEDDED_APPEX="$APP/Contents/PlugIns/NotionistWidgetExtension.appex"
+
+# Use Xcode-generated .xcent if present, otherwise fall back to source entitlements
 APPEX_XCENT="$INTERMEDIATES/NotionistWidgetExtension.build/NotionistWidgetExtension.appex.xcent"
 APP_XCENT="$INTERMEDIATES/NotionistWidgetApp.build/NotionistWidgetApp.app.xcent"
 
-echo "→ Signing widget extension (embedded)..."
 if [ -f "$APPEX_XCENT" ]; then
-  /usr/bin/codesign --force --sign - \
-    --entitlements "$APPEX_XCENT" \
-    --timestamp=none --generate-entitlement-der \
-    "$EMBEDDED_APPEX"
+  APPEX_ENT="$APPEX_XCENT"
 else
-  /usr/bin/codesign --force --sign - --timestamp=none "$EMBEDDED_APPEX"
+  APPEX_ENT="$APPEX_ENT_SRC"
 fi
 
-echo "→ Signing app..."
 if [ -f "$APP_XCENT" ]; then
-  /usr/bin/codesign --force --sign - \
-    --entitlements "$APP_XCENT" \
-    --timestamp=none --generate-entitlement-der \
-    "$APP"
+  APP_ENT="$APP_XCENT"
 else
-  /usr/bin/codesign --force --sign - --timestamp=none "$APP"
+  APP_ENT="$APP_ENT_SRC"
 fi
+
+echo "→ Signing widget extension with: $APPEX_ENT"
+/usr/bin/codesign --force --sign - \
+  --entitlements "$APPEX_ENT" \
+  --timestamp=none --generate-entitlement-der \
+  "$EMBEDDED_APPEX"
+
+echo "→ Verifying widget extension entitlements..."
+codesign -dv --entitlements :- "$EMBEDDED_APPEX" 2>/dev/null | grep -A 20 "<?xml" || true
+
+echo "→ Signing app with: $APP_ENT"
+/usr/bin/codesign --force --sign - \
+  --entitlements "$APP_ENT" \
+  --timestamp=none --generate-entitlement-der \
+  "$APP"
 
 echo "→ Zipping..."
 cd "$PRODUCTS"
