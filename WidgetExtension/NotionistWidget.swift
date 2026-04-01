@@ -5,6 +5,7 @@ struct NotionistEntry: TimelineEntry {
     let date: Date
     let items: [TimelineItem]
     let errorMessage: String?
+    let noteMessage: String?
     let title: String
     let background: Color
     let textColor: Color
@@ -12,12 +13,19 @@ struct NotionistEntry: TimelineEntry {
 }
 
 struct NotionistProvider: TimelineProvider {
-    /// Keeps items with no date, or dated today (local) or later; preserves service sort order.
-    private static func upcomingItemsForDisplay(
+    private struct DisplaySelection {
+        let items: [TimelineItem]
+        let usesRecentPastFallback: Bool
+    }
+
+    /// Prefers items with no date, or dated today (local) or later.
+    /// If nothing qualifies, falls back to the most recent past-dated rows
+    /// so the widget still shows something useful instead of a blank list.
+    private static func itemsForDisplay(
         _ items: [TimelineItem],
         family: WidgetFamily,
         limits: WidgetConfigFile.WidgetDisplay
-    ) -> [TimelineItem] {
+    ) -> DisplaySelection {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: Date())
         let limit: Int = {
@@ -28,13 +36,23 @@ struct NotionistProvider: TimelineProvider {
                 return max(1, limits.maxItemsMedium)
             }
         }()
-        return items
-            .filter { item in
-                guard let d = item.date else { return true }
-                return d >= startOfToday
-            }
-            .prefix(limit)
-            .map { $0 }
+
+        let upcomingOrUndated = items.filter { item in
+            guard let d = item.date else { return true }
+            return d >= startOfToday
+        }
+
+        if !upcomingOrUndated.isEmpty {
+            return DisplaySelection(
+                items: Array(upcomingOrUndated.prefix(limit)),
+                usesRecentPastFallback: false
+            )
+        }
+
+        return DisplaySelection(
+            items: Array(items.suffix(limit)),
+            usesRecentPastFallback: !items.isEmpty
+        )
     }
 
     func placeholder(in context: Context) -> NotionistEntry {
@@ -48,6 +66,7 @@ struct NotionistProvider: TimelineProvider {
                 TimelineItem(id: "2", name: "Launch Beta", date: Date().addingTimeInterval(172800), status: "Planned")
             ],
             errorMessage: nil,
+            noteMessage: nil,
             title: cfg.widget.title,
             background: bg,
             textColor: fg,
@@ -79,6 +98,7 @@ struct NotionistProvider: TimelineProvider {
                     date: Date(),
                     items: [],
                     errorMessage: "Edit Config/widget-config.json with your Notion token and database ID, then rebuild the app.",
+                    noteMessage: nil,
                     title: w.title,
                     background: bg,
                     textColor: fg,
@@ -92,13 +112,11 @@ struct NotionistProvider: TimelineProvider {
                         databaseId: n.databaseId,
                         notionAPIVersion: n.apiVersion
                     )
-                    let shown = Self.upcomingItemsForDisplay(items, family: context.family, limits: w)
+                    let selection = Self.itemsForDisplay(items, family: context.family, limits: w)
+                    let shown = selection.items
                     let message: String? = {
                         if items.isEmpty {
                             return "No supported rows were found in Notion. Make sure the database has a title property and is shared with your integration."
-                        }
-                        if shown.isEmpty {
-                            return "Loaded \(items.count) row(s), but none are upcoming today or later."
                         }
                         return nil
                     }()
@@ -106,6 +124,7 @@ struct NotionistProvider: TimelineProvider {
                         date: Date(),
                         items: shown,
                         errorMessage: message,
+                        noteMessage: selection.usesRecentPastFallback ? "Showing recent rows because none are dated today or later." : nil,
                         title: w.title,
                         background: bg,
                         textColor: fg,
@@ -117,6 +136,7 @@ struct NotionistProvider: TimelineProvider {
                         date: Date(),
                         items: [],
                         errorMessage: userVisibleErrorMessage(for: error),
+                        noteMessage: nil,
                         title: w.title,
                         background: bg,
                         textColor: fg,
@@ -153,28 +173,39 @@ struct NotionistWidgetView: View {
                 Text(errorMessage)
                     .font(.caption)
                     .foregroundStyle(entry.textColor.opacity(0.6))
+            } else if let noteMessage = entry.noteMessage {
+                Text(noteMessage)
+                    .font(.caption2)
+                    .lineLimit(2)
+                    .foregroundStyle(entry.textColor.opacity(0.6))
+
+                itemList
             } else if entry.items.isEmpty {
                 Text("No upcoming items.")
                     .font(.caption)
                     .foregroundStyle(entry.textColor.opacity(0.6))
             } else {
-                ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
-                    HStack(alignment: .top, spacing: 8) {
-                        listMarker(index: index)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(item.name)
-                                .font(.subheadline)
-                                .lineLimit(1)
-                                .foregroundStyle(entry.textColor)
-                            Text(subtitle(for: item))
-                                .font(.caption2)
-                                .foregroundStyle(entry.textColor.opacity(0.6))
-                        }
-                    }
-                }
+                itemList
             }
         }
         .padding(12)
+    }
+
+    private var itemList: some View {
+        ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
+            HStack(alignment: .top, spacing: 8) {
+                listMarker(index: index)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(item.name)
+                        .font(.subheadline)
+                        .lineLimit(1)
+                        .foregroundStyle(entry.textColor)
+                    Text(subtitle(for: item))
+                        .font(.caption2)
+                        .foregroundStyle(entry.textColor.opacity(0.6))
+                }
+            }
+        }
     }
 
     @ViewBuilder

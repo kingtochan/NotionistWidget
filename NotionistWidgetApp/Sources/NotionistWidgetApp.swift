@@ -16,6 +16,7 @@ struct NotionistWidgetApp: App {
 
 struct SetupView: View {
     private let config = WidgetConfigLoader.load()
+    private let widgetKind = "NotionistWidget"
     @State private var copiedExample = false
     @State private var connectionMessage: String?
     @State private var isTestingConnection = false
@@ -94,6 +95,7 @@ struct SetupView: View {
 
                 HStack(spacing: 12) {
                     Button("Reload Widget") {
+                        WidgetCenter.shared.reloadTimelines(ofKind: widgetKind)
                         WidgetCenter.shared.reloadAllTimelines()
                     }
                     .buttonStyle(.borderedProminent)
@@ -160,15 +162,15 @@ struct SetupView: View {
                     notionAPIVersion: notion.apiVersion
                 )
 
-                let upcomingCount = items.filter { item in
-                    guard let date = item.date else { return true }
-                    return date >= Calendar.current.startOfDay(for: Date())
-                }.count
+                let mediumSummary = widgetDisplaySummary(for: items, limit: config.widget.maxItemsMedium)
+                let largeSummary = widgetDisplaySummary(for: items, limit: config.widget.maxItemsLarge)
 
                 await MainActor.run {
-                    connectionMessage = "Fetched \(items.count) row(s), \(upcomingCount) upcoming."
+                    connectionMessage = "Fetched \(items.count) row(s). Medium widget: \(mediumSummary). Large widget: \(largeSummary)."
                     isTestingConnection = false
                 }
+                WidgetCenter.shared.reloadTimelines(ofKind: widgetKind)
+                WidgetCenter.shared.reloadAllTimelines()
             } catch {
                 let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
                 await MainActor.run {
@@ -181,6 +183,26 @@ struct SetupView: View {
 
     private func displayValue(_ value: String) -> String {
         value.isEmpty ? "Not set" : value
+    }
+
+    private func widgetDisplaySummary(for items: [TimelineItem], limit: Int) -> String {
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        let clampedLimit = max(1, limit)
+        let upcomingOrUndated = items.filter { item in
+            guard let date = item.date else { return true }
+            return date >= startOfToday
+        }
+
+        if !upcomingOrUndated.isEmpty {
+            let shownCount = min(clampedLimit, upcomingOrUndated.count)
+            return "shows \(shownCount) upcoming/undated item(s)"
+        }
+
+        let shownCount = min(clampedLimit, items.count)
+        if shownCount > 0 {
+            return "shows \(shownCount) recent past item(s)"
+        }
+        return "shows no items"
     }
 
     private func maskedValue(_ value: String) -> String {
