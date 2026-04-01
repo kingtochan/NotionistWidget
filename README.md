@@ -91,4 +91,4 @@ Accepts a **color name** (case-insensitive) or a **hex code** (`#RRGGBB`):
 
 ## Feedback and Contribution
 
-This is intended to be a small modular tool to help the Notion community. Any feedback is welcomed. To suggest changes, simply submit a pull request for your commit.
+This is intended to be a small modular tool to help the Notion community. Any feedback is welcomed. To suggest changes, simply submit a push request for your commit.
