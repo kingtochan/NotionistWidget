@@ -1,0 +1,65 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build and package
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Build (ad-hoc signed)
+        run: |
+          xcodebuild \
+            -project NotionistWidget.xcodeproj \
+            -scheme NotionistWidgetApp \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGNING_ALLOWED=YES \
+            build
+
+      - name: Locate .app
+        id: locate
+        run: |
+          APP_PATH=$(find build/DerivedData -name "NotionistWidgetApp.app" -maxdepth 6 | head -1)
+          echo "app_path=$APP_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Zip .app
+        run: |
+          cd "$(dirname "${{ steps.locate.outputs.app_path }}")"
+          zip -r "$GITHUB_WORKSPACE/NotionistWidget-${{ github.ref_name }}.zip" NotionistWidgetApp.app
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Notionist Widget ${{ github.ref_name }}"
+          body: |
+            ## Install (prebuilt)
+
+            1. Download **NotionistWidget-${{ github.ref_name }}.zip** below and unzip it.
+            2. Move **NotionistWidgetApp.app** to your `/Applications` folder.
+            3. **Right-click → Open** (required once to allow an unsigned app — macOS will block a plain double-click).
+            4. The settings window opens — enter your Notion token, database ID, and preferences, then click **Save & Reload Widget**.
+            5. Right-click your desktop → **Edit Widgets** → search for **Notionist** and add it.
+
+            > **Note:** Because this build is ad-hoc signed (not notarized), macOS Gatekeeper will warn you the first time. Right-click → Open bypasses this. If you'd prefer a fully trusted build, see the [build from source](../../#build-from-source) instructions in the README.
+
+            ## What's changed
+            <!-- add release notes here -->
+          files: NotionistWidget-${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
