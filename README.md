@@ -42,8 +42,7 @@ xcodebuild \
   build
 ```
 
-The `.app` is written to Xcode's DerivedData folder (not included in this repo). Run `xcodebuild -showBuildSettings | grep BUILT_PRODUCTS_DIR` to find the exact path.
-
+The `.app` is written to Xcode's DerivedData folder (not included in this repo).
 ## Feedback and Contribution
 
 This is intended to be a small modular tool to help the Notion community. Any feedback is welcomed. To suggest changes, simply submit a pull request for your commit.
