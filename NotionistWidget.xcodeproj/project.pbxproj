@@ -50,6 +50,7 @@
 		A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetConfig.swift; sourceTree = "<group>"; };
 		BB1122334455667788990011 /* NotionistWidgetApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotionistWidgetApp.entitlements; sourceTree = "<group>"; };
 		AB62090427D479E62994D1B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B1C2D3E4F501020304050601 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F1A2B3C4D5E6789012345678 /* NotionistWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotionistWidget.entitlements; sourceTree = "<group>"; };
 		CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotionistWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA7002E15D4B23C118E64DF5 /* NotionistWidgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotionistWidgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,7 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				06D4AD1A2294C38E6A3F715B /* Shared */,
-				B243A5446D2809755EC1963E /* Sources */,
+				B243A5446D2809755EC1963E /* NotionistWidgetApp */,
 				5CD3B63B444FD6A04332DBDB /* WidgetExtension */,
 				DE17986E63F5276215B6C980 /* Products */,
 			);
@@ -89,11 +90,19 @@
 		B243A5446D2809755EC1963E /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */,
+				B1C2D3E4F501020304050601 /* Info.plist */,
 				BB1122334455667788990011 /* NotionistWidgetApp.entitlements */,
+				C1D2E3F40501020304050607 /* Sources */,
 			);
-			name = Sources;
-			path = NotionistWidgetApp/Sources;
+			path = NotionistWidgetApp;
+			sourceTree = "<group>";
+		};
+		C1D2E3F40501020304050607 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		DE17986E63F5276215B6C980 /* Products */ = {

@@ -78,7 +78,7 @@ struct NotionistProvider: TimelineProvider {
                 let entry = NotionistEntry(
                     date: Date(),
                     items: [],
-                    errorMessage: "Open the Notionist Widget app and enter your Notion token and database ID.",
+                    errorMessage: "Open the Notionist Widget app and enter your Notion token and database ID. If you already saved them, your Xcode signing setup may not support App Groups.",
                     title: w.title,
                     background: bg,
                     textColor: fg,

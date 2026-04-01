@@ -4,27 +4,15 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 ---
 
-## Install — Build from Source (Recommended)
+## Install
 
-Building from source is the recommended way to install. Xcode signs the app with your local developer identity automatically, which is required for the widget and host app to share settings correctly.
+This project is currently distributed as source only.
 
-See [Build from Source](#install--build-from-source) below.
-
----
-
-## Install — Prebuilt
-
-> ⚠️ **Known limitation:** The prebuilt binary is ad-hoc signed with no Apple Team ID. Due to macOS sandbox restrictions, the widget extension may not be able to read settings saved by the host app. If the widget shows no items after setup, please use the [Build from Source](#install--build-from-source) method instead.
-
-1. Go to the [**Releases**](../../releases/latest) page and download the latest `NotionistWidget-v1.0.0.zip`.
-2. Unzip and move **NotionistWidgetApp.app** to your `/Applications` folder.
-3. **Right-click → Open** the app (required once — macOS blocks unsigned apps on a plain double-click).
-4. The settings window opens. Enter your Notion credentials and preferences, then click **Save & Reload Widget**.
-5. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
+I cannot provide a prebuilt signed `.app` because I do not have an Apple Developer account. If you want to use the widget, please build it locally in Xcode.
 
 ---
 
-## Install — Build from Source
+## Build from Source
 
 If you prefer to build the app yourself (no trust required):
 
@@ -39,14 +27,19 @@ If you prefer to build the app yourself (no trust required):
 2. Open your Notion database, click **…** → **Connections** and share it with your integration.
 3. Find the database ID in the URL — it's the string between the last `/` and the `?`.
 
-### Step 2 — App Group (one-time Xcode setup)
+### Step 2 — Signing note
 
-The app and widget share settings via an App Group. You must enable this capability before building:
+The app and widget exchange settings through an App Group entitlement.
 
-1. Open `NotionistWidget.xcodeproj` in Xcode.
-2. Select the **NotionistWidgetApp** target → **Signing & Capabilities** → **+ Capability** → **App Groups**.
-3. Add the group ID: `group.com.example.notionistwidget`
-4. Repeat for the **NotionistWidgetExtension** target using the **same** group ID.
+If Xcode lets you sign both targets with a profile that supports App Groups, the setup should work normally.
+
+If you are using a free Apple ID or no Apple Developer membership, Xcode may refuse the App Groups capability. In that case:
+
+1. The project may still build locally.
+2. The settings app may still open.
+3. The widget may not be able to read the saved configuration from the host app.
+
+That limitation is caused by Apple's signing/capability restrictions, not by a downloadable release from this repository.
 
 ### Step 3 — Build & run
 
@@ -54,8 +47,10 @@ The app and widget share settings via an App Group. You must enable this capabil
 
 1. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
 2. Press **⌘R**.
-3. The settings window opens — fill in your token, database ID, and any display preferences, then click **Save & Reload Widget**.
+3. The settings window opens. Fill in your token, database ID, and any display preferences, then click **Save & Reload Widget**.
 4. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
+
+If the widget still shows no items after saving, the most likely cause is that App Groups was not enabled successfully for your signing setup.
 
 To keep the widget after Xcode is closed, drag the `.app` from **Product → Show Build Folder in Finder** to `/Applications` and launch it once from there.
 

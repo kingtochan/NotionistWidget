@@ -6,6 +6,7 @@ xcuserdata/
 *.xcscmblueprint
 DerivedData/
 build/
+.build/
 *.moved-aside
 .DS_Store
 NotionistWidget-v*.zip
