@@ -16,6 +16,20 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 ---
 
+## Publishing a Release (for maintainers)
+
+1. Run the build script from the project root:
+   ```zsh
+   ./build-release.sh 1.0.0
+   ```
+   This produces `NotionistWidget-v1.0.0.zip` in the project root.
+2. Commit and push your changes via **GitHub Desktop**.
+3. On [github.com](https://github.com) → your repo → **Releases** → **Draft a new release**.
+4. Create a new tag (e.g. `v1.0.0`), write release notes, and upload the `.zip` file.
+5. Click **Publish release**.
+
+---
+
 ## Install — Build from Source
 
 If you prefer to build the app yourself (no trust required):
