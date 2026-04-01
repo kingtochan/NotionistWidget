@@ -61,7 +61,7 @@ Open `Config/widget-config.json` and fill in your values before building:
 1. Open `NotionistWidget.xcodeproj` in Xcode.
 2. Leave the signing settings as they are. The project is already set up for local **Sign to Run Locally** signing.
 3. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
-4. Build and run once from Xcode.
+4. **Product** → **Build** once from Xcode.
 5. In Xcode, choose **Product** → **Show Build Folder in Finder**.
 6. Move `NotionistWidgetApp.app` to `/Applications`.
 7. Launch the app once from `/Applications`.
