@@ -93,15 +93,64 @@ The built app is written to Xcode's DerivedData folder.
 
 | Key | Description |
 |---|---|
-| `notion.token` | Your Notion integration secret (`secret_...`) |
-| `notion.databaseId` | 32-character ID from the Notion database URL |
-| `notion.apiVersion` | Notion API version header to send |
-| `widget.title` | Header text shown on the widget |
-| `widget.backgroundColor` | Color name or hex code |
-| `widget.textColor` | Color name or hex code |
-| `widget.maxItemsMedium` | Number of rows to show on a medium widget |
-| `widget.maxItemsLarge` | Number of rows to show on a large widget |
+| `notion.token` | Your Notion integration secret, usually starting with `secret_` |
+| `notion.databaseId` | Database ID from the Notion URL |
+| `notion.apiVersion` | Notion API version header, for example `2022-06-28` |
+| `widget.title` | Any text shown as the widget header |
+| `widget.backgroundColor` | A supported color name or a hex code |
+| `widget.textColor` | A supported color name or a hex code |
+| `widget.maxItemsMedium` | Whole number of rows to show on a medium widget |
+| `widget.maxItemsLarge` | Whole number of rows to show on a large widget |
 | `widget.listStyle` | `bullet` or `numbered` |
+
+### Parameter options
+
+#### `notion.token`
+
+- Use your Notion integration secret.
+- Example: `secret_xxxxxxxxxxxx`
+
+#### `notion.databaseId`
+
+- Use the database ID from your Notion database URL.
+- Example format: `0123456789abcdef0123456789abcdef`
+
+#### `notion.apiVersion`
+
+- Use a Notion API version string.
+- Default in this project: `2022-06-28`
+
+#### `widget.title`
+
+- Any plain text is allowed.
+- Example: `My Tasks`, `Project Timeline`, `Sprint Board`
+
+#### `widget.backgroundColor`
+
+- Use one of the supported names:
+  `black`, `white`, `red`, `green`, `blue`, `orange`, `yellow`, `pink`, `purple`, `cyan`, `mint`, `teal`, `indigo`, `brown`, `gray`, `darkGray`, `lightGray`
+- Or use a hex color like `#1C1C1E` or `#FFFFFF`
+
+#### `widget.textColor`
+
+- Use the same options as `widget.backgroundColor`
+- Examples: `white`, `black`, `#F5F5F5`
+
+#### `widget.maxItemsMedium`
+
+- Use any whole number greater than or equal to `1`
+- Recommended range: `1` to `10`
+
+#### `widget.maxItemsLarge`
+
+- Use any whole number greater than or equal to `1`
+- Recommended range: `1` to `20`
+
+#### `widget.listStyle`
+
+- Allowed values:
+  `bullet`
+  `numbered`
 
 ### Color values
 
