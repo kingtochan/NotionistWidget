@@ -17,6 +17,8 @@ struct NotionistWidgetApp: App {
 struct SetupView: View {
     private let config = WidgetConfigLoader.load()
     @State private var copiedExample = false
+    @State private var connectionMessage: String?
+    @State private var isTestingConnection = false
 
     var body: some View {
         ScrollView {
@@ -68,6 +70,28 @@ struct SetupView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
 
+                GroupBox("Connection Check") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Use this to confirm the installed app can read the bundled config and fetch rows from Notion.")
+                            .foregroundStyle(.secondary)
+
+                        HStack(spacing: 12) {
+                            Button(isTestingConnection ? "Testing..." : "Test Notion Fetch") {
+                                testConnection()
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(isTestingConnection)
+
+                            if let connectionMessage {
+                                Text(connectionMessage)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
                 HStack(spacing: 12) {
                     Button("Reload Widget") {
                         WidgetCenter.shared.reloadAllTimelines()
@@ -110,6 +134,48 @@ struct SetupView: View {
         copiedExample = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             copiedExample = false
+        }
+    }
+
+    private func testConnection() {
+        let notion = config.notion
+        let missingConfig =
+            notion.token.isEmpty || notion.databaseId.isEmpty
+            || notion.token == "YOUR_NOTION_TOKEN_HERE"
+            || notion.databaseId == "YOUR_DATABASE_ID_HERE"
+
+        guard !missingConfig else {
+            connectionMessage = "Bundled config still has placeholder values."
+            return
+        }
+
+        isTestingConnection = true
+        connectionMessage = nil
+
+        Task {
+            do {
+                let items = try await NotionService().fetchTimelineItems(
+                    token: notion.token,
+                    databaseId: notion.databaseId,
+                    notionAPIVersion: notion.apiVersion
+                )
+
+                let upcomingCount = items.filter { item in
+                    guard let date = item.date else { return true }
+                    return date >= Calendar.current.startOfDay(for: Date())
+                }.count
+
+                await MainActor.run {
+                    connectionMessage = "Fetched \(items.count) row(s), \(upcomingCount) upcoming."
+                    isTestingConnection = false
+                }
+            } catch {
+                let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                await MainActor.run {
+                    connectionMessage = message
+                    isTestingConnection = false
+                }
+            }
         }
     }
 
