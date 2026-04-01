@@ -29,7 +29,7 @@ If you prefer to build the app yourself (no trust required):
 
 1. Create an [integration](https://www.notion.so/my-integrations), copy its secret token.
 2. Open your Notion database, click **…** → **Connections** and share it with your integration.
-3. Find the database ID in the URL — it's the 32-character string between the last `/` and the `?`.
+3. Find the database ID in the URL — it's the string between the last `/` and the `?`.
 
 ### Step 2 — App Group (one-time Xcode setup)
 
