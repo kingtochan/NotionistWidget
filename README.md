@@ -2,6 +2,8 @@
 
 Open-source macOS desktop widget that lists upcoming rows from a Notion database. Supported columns are **Name** (title), optional **Date** (date), and optional **Status** (select). The widget refreshes from Notion every 30 minutes.
 
+Inspired by the lack of widget tool that directly show Notion database, Notionist Widget is designed for keeping track of to-do lists or project timelines in Notion to increase productivity.
+
 ---
 
 ## Install
