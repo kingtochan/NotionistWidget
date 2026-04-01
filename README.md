@@ -4,6 +4,14 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 ## Setup
 
+In your terminal,
+
+```zsh
+git clone https://github.com/kingtochan/NotionistWidget.git
+cd NotionistWidget
+# edit Shared/WidgetConfig.json, then build below
+```
+
 1. In Notion, create an [integration](https://www.notion.so/my-integrations), copy its token, and **share** your database with that integration.
 2. Find the database ID in the URL of the database full page (either from the webpage URL or the share URL in Notion app). The ID is the chain between the last slash (/) and the question mark (?) in the URL.
 3. Edit **`Shared/WidgetConfig.json`**:
@@ -11,12 +19,6 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
    - **`widget`**: `title`, `backgroundColorHex` (`#RRGGBB` or `#RRGGBBAA`), `maxItemsMedium`, `maxItemsLarge`, `listStyle` (`bullet` or `numbered`).
 
 Values are **bundled at build time** — change the JSON, then rebuild.
-
-```zsh
-git clone https://github.com/kingtochan/NotionistWidget.git
-cd NotionistWidget
-# edit Shared/WidgetConfig.json, then build below
-```
 
 ## Build
 
