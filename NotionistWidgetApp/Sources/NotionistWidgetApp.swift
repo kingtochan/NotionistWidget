@@ -155,7 +155,11 @@ struct SettingsView: View {
 
     private func saveAndReload() {
         let cfg = WidgetConfigFile(
-            notion: .init(token: token, databaseId: databaseId, apiVersion: apiVersion),
+            notion: .init(
+                token:      token.trimmingCharacters(in: .whitespaces),
+                databaseId: databaseId.trimmingCharacters(in: .whitespaces),
+                apiVersion: apiVersion.trimmingCharacters(in: .whitespaces)
+            ),
             widget: .init(
                 title:           widgetTitle,
                 backgroundColor: backgroundColor,
