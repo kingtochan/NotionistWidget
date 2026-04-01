@@ -1,9 +1,25 @@
 import Foundation
 
 struct NotionService {
-    enum ServiceError: Error {
+    enum ServiceError: LocalizedError {
         case invalidURL
-        case invalidResponse
+        case invalidResponse(statusCode: Int, message: String?)
+        case invalidResponsePayload
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidURL:
+                return "The Notion database ID is invalid."
+            case let .invalidResponse(statusCode, message):
+                let trimmed = message?.trimmingCharacters(in: .whitespacesAndNewlines)
+                if let trimmed, !trimmed.isEmpty {
+                    return "Notion returned \(statusCode): \(trimmed)"
+                }
+                return "Notion returned HTTP \(statusCode)."
+            case .invalidResponsePayload:
+                return "The Notion response could not be read."
+            }
+        }
     }
 
     func fetchTimelineItems(token: String, databaseId: String, notionAPIVersion: String) async throws -> [TimelineItem] {
@@ -20,25 +36,26 @@ struct NotionService {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            throw ServiceError.invalidResponse
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw ServiceError.invalidResponsePayload
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let apiError = try? JSONDecoder().decode(NotionAPIError.self, from: data)
+            let fallbackMessage = String(data: data, encoding: .utf8)
+            throw ServiceError.invalidResponse(
+                statusCode: httpResponse.statusCode,
+                message: apiError?.message ?? fallbackMessage
+            )
         }
 
         let decoded = try JSONDecoder().decode(NotionQueryResponse.self, from: data)
         return decoded.results.compactMap { page in
-            guard
-                let titleProperty = page.properties["Name"],
-                case let .title(titleItems) = titleProperty,
-                let firstTitle = titleItems.first?.plainText
-            else {
-                return nil
-            }
+            let title = page.properties.preferredTitleText() ?? "Untitled"
 
             let itemDate: Date?
             if
-                let dateProperty = page.properties["Date"],
-                case let .date(dateObject) = dateProperty,
-                let raw = dateObject?.start,
+                let raw = page.properties.preferredDateStart(),
                 let parsed = Self.parseNotionDate(raw)
             {
                 itemDate = parsed
@@ -46,18 +63,9 @@ struct NotionService {
                 itemDate = nil
             }
 
-            let status: String?
-            if let statusProperty = page.properties["Status"] {
-                switch statusProperty {
-                case let .select(obj):  status = obj?.name
-                case let .status(obj):  status = obj?.name
-                default:                status = nil
-                }
-            } else {
-                status = nil
-            }
+            let status = page.properties.preferredStatusName()
 
-            return TimelineItem(id: page.id, name: firstTitle, date: itemDate, status: status)
+            return TimelineItem(id: page.id, name: title, date: itemDate, status: status)
         }
         .sorted(by: Self.compareTimelineItems)
     }
@@ -125,6 +133,11 @@ private struct NotionSort: Codable {
 
 private struct NotionQueryResponse: Codable {
     let results: [NotionPage]
+}
+
+private struct NotionAPIError: Codable {
+    let code: String?
+    let message: String?
 }
 
 private struct NotionPage: Codable {
@@ -204,4 +217,86 @@ private struct NotionDate: Codable {
 
 private struct NotionSelect: Codable {
     let name: String?
+}
+
+private extension NotionProperty {
+    var titleText: String? {
+        guard case let .title(titleItems) = self else { return nil }
+        let joined = titleItems
+            .map(\.plainText)
+            .joined()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return joined.isEmpty ? nil : joined
+    }
+
+    var dateStart: String? {
+        guard case let .date(dateObject) = self else { return nil }
+        return dateObject?.start?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var statusName: String? {
+        switch self {
+        case let .select(select):
+            return select?.name?.trimmingCharacters(in: .whitespacesAndNewlines)
+        case let .status(status):
+            return status?.name?.trimmingCharacters(in: .whitespacesAndNewlines)
+        default:
+            return nil
+        }
+    }
+
+    var isTitle: Bool {
+        if case .title = self {
+            return true
+        }
+        return false
+    }
+
+    var isDate: Bool {
+        if case .date = self {
+            return true
+        }
+        return false
+    }
+
+    var isStatusLike: Bool {
+        switch self {
+        case .select, .status:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+private extension Dictionary where Key == String, Value == NotionProperty {
+    func preferredTitleText() -> String? {
+        if let exact = self["Name"]?.titleText {
+            return exact
+        }
+
+        return values
+            .first(where: \.isTitle)?
+            .titleText
+    }
+
+    func preferredDateStart() -> String? {
+        if let exact = self["Date"]?.dateStart, !exact.isEmpty {
+            return exact
+        }
+
+        return values
+            .first(where: \.isDate)?
+            .dateStart
+    }
+
+    func preferredStatusName() -> String? {
+        if let exact = self["Status"]?.statusName, !exact.isEmpty {
+            return exact
+        }
+
+        return values
+            .first(where: \.isStatusLike)?
+            .statusName
+    }
 }

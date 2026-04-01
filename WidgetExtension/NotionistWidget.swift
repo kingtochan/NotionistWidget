@@ -93,10 +93,19 @@ struct NotionistProvider: TimelineProvider {
                         notionAPIVersion: n.apiVersion
                     )
                     let shown = Self.upcomingItemsForDisplay(items, family: context.family, limits: w)
+                    let message: String? = {
+                        if items.isEmpty {
+                            return "No supported rows were found in Notion. Make sure the database has a title property and is shared with your integration."
+                        }
+                        if shown.isEmpty {
+                            return "Loaded \(items.count) row(s), but none are upcoming today or later."
+                        }
+                        return nil
+                    }()
                     let entry = NotionistEntry(
                         date: Date(),
                         items: shown,
-                        errorMessage: nil,
+                        errorMessage: message,
                         title: w.title,
                         background: bg,
                         textColor: fg,
@@ -107,7 +116,7 @@ struct NotionistProvider: TimelineProvider {
                     let entry = NotionistEntry(
                         date: Date(),
                         items: [],
-                        errorMessage: "Failed to load Notion data. Check widget-config.json and confirm your Notion integration can access the database.",
+                        errorMessage: userVisibleErrorMessage(for: error),
                         title: w.title,
                         background: bg,
                         textColor: fg,
@@ -121,6 +130,13 @@ struct NotionistProvider: TimelineProvider {
                 completion(timeline)
             }
         }
+    }
+
+    private func userVisibleErrorMessage(for error: Error) -> String {
+        if let localized = error as? LocalizedError, let message = localized.errorDescription, !message.isEmpty {
+            return message
+        }
+        return "Failed to load Notion data. Check widget-config.json and confirm your Notion integration can access the database."
     }
 }
 
