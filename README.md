@@ -5,7 +5,7 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 ## Setup
 
 1. In Notion, create an [integration](https://www.notion.so/my-integrations), copy its token, and **share** your database with that integration.
-2. Find the database ID in the URL of the database full page. The ID is the chain between the last slash (/) and the question mark (?) in the URL.
+2. Find the database ID in the URL of the database full page (either from the webpage URL or the share URL in Notion app). The ID is the chain between the last slash (/) and the question mark (?) in the URL.
 3. Edit **`Shared/WidgetConfig.json`**:
    - **`notion`**: `token`, `databaseId`, optional `apiVersion` (default `2022-06-28`).
    - **`widget`**: `title`, `backgroundColorHex` (`#RRGGBB` or `#RRGGBBAA`), `maxItemsMedium`, `maxItemsLarge`, `listStyle` (`bullet` or `numbered`).
@@ -22,8 +22,6 @@ cd NotionistWidget
 
 No pre-built binary is provided. This project is designed to be built from source locally.
 
-**Requirements:** macOS 13+, Xcode 15+
-
 ### Option A — Xcode (recommended)
 
 1. Open `NotionistWidget.xcodeproj` in Xcode.
@@ -33,7 +31,7 @@ No pre-built binary is provided. This project is designed to be built from sourc
 
 To keep the widget after Xcode is closed, drag the built `.app` from the **Products** group in the Project Navigator to `/Applications`, then launch it once from there.
 
-### Option B — Command line
+### Option B — Command line (requires `xcodegen` from `brew install`)
 
 ```zsh
 xcodebuild \
