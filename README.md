@@ -4,8 +4,6 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 ## Setup
 
-In your terminal,
-
 ```zsh
 git clone https://github.com/kingtochan/NotionistWidget.git
 cd NotionistWidget
