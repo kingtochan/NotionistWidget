@@ -1,20 +1,18 @@
 # Notionist Widget
 
-Open-source macOS desktop widget that lists upcoming rows from a Notion database. Supported columns are **Name** (title), optional **Date** (date), and optional **Status** (select). This project was inspired by the lack of an official Notion widget that gives a quick view of a specific page or database. It is useful for tracking a to-do list or project timeline at a glance. The list refreshes from Notion every 30 minutes.
+Open-source macOS desktop widget that lists upcoming rows from a Notion database. Supported columns are **Name** (title), optional **Date** (date), and optional **Status** (select). The widget refreshes from Notion every 30 minutes.
 
 ---
 
 ## Install
 
-This project is currently distributed as source only.
+This project is distributed as source only. There is no prebuilt `.app`.
 
-A prebuilt `.app` is not included because it cannot be properly signed for distribution. If you want to use the widget, please build it locally in Xcode.
+The widget is configured before build time through a bundled JSON file, so it does not depend on App Groups or runtime settings sharing between the app and widget.
 
 ---
 
 ## Build from Source
-
-Build the app locally in Xcode:
 
 ### Step 0 — Clone the repository
 
@@ -28,38 +26,44 @@ cd NotionistWidget
 - macOS 13 or later
 - Xcode 15 or later
 
-### Step 1 — Prepare Notion
+### Step 1 — Prepare your Notion integration
 
 1. Create an [integration](https://www.notion.so/my-integrations) and copy its secret token.
-2. Open your Notion database, click **…** → **Connections** and share it with your integration.
-3. Find the database ID in the URL — it's the string between the last `/` and the `?`.
+2. Open your Notion database, click **…** → **Connections**, and share it with your integration.
+3. Find the database ID in the URL. It is the string between the last `/` and the `?`.
 
-### Step 2 — Check signing limitations
+### Step 2 — Edit the widget config
 
-The app and widget exchange settings through an App Group entitlement.
+Open `Config/widget-config.json` and fill in your values before building:
 
-If Xcode lets you sign both targets with a profile that supports App Groups, the app should work normally.
-
-If you are using a free Apple ID or no Apple Developer membership, Xcode may refuse the App Groups capability. In that case:
-
-1. The project may still build locally.
-2. The settings app may still open.
-3. The widget may not be able to read the saved configuration from the host app.
-
-That limitation is caused by Apple's signing and capability restrictions, not by anything in this repository.
+```json
+{
+  "notion": {
+    "token": "YOUR_NOTION_TOKEN_HERE",
+    "databaseId": "YOUR_DATABASE_ID_HERE",
+    "apiVersion": "2022-06-28"
+  },
+  "widget": {
+    "title": "Notionist Widget",
+    "backgroundColor": "darkGray",
+    "textColor": "white",
+    "maxItemsMedium": 4,
+    "maxItemsLarge": 8,
+    "listStyle": "bullet"
+  }
+}
+```
 
 ### Step 3 — Build and run
 
-**Option A — Xcode (recommended)**
+**Option A — Xcode**
 
-1. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
-2. Press **⌘R**.
-3. The settings window opens. Fill in your token, database ID, and any display preferences, then click **Save & Reload Widget**.
+1. Open `NotionistWidget.xcodeproj` in Xcode.
+2. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
+3. Build and run.
 4. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
 
-If the widget still shows no items after saving, the most likely cause is that App Groups was not enabled successfully for your signing setup.
-
-To keep the widget after Xcode is closed, drag the `.app` from **Product → Show Build Folder in Finder** to `/Applications` and launch it once from there.
+If you change `widget-config.json`, rebuild the app so the updated config is bundled into the widget.
 
 **Option B — Command line**
 
@@ -69,33 +73,50 @@ xcodebuild \
   -scheme NotionistWidgetApp \
   -configuration Release \
   -destination 'platform=macOS' \
+  CODE_SIGNING_ALLOWED=NO \
   build
 ```
 
-The `.app` is written to Xcode's DerivedData folder. Move it to `/Applications` and launch it once.
+The built app is written to Xcode's DerivedData folder.
 
 ---
 
-## Settings
+## How It Works
 
-All settings are changed through the app's settings window at runtime — no rebuild needed.
+- `NotionistWidgetApp` is a lightweight container app for the widget.
+- `WidgetExtension` reads settings from the bundled `Config/widget-config.json` file.
+- To change credentials or display options, edit the JSON file and rebuild.
 
-| Setting | Description |
+---
+
+## Configuration Reference
+
+| Key | Description |
 |---|---|
-| **Integration Token** | Your Notion integration secret (`secret_...`) |
-| **Database ID** | 32-character ID from the Notion database URL |
-| **Widget Title** | Header text shown on the widget |
-| **Background Color** | Color name or hex code (see below) |
-| **Text Color** | Color name or hex code (see below) |
-| **Max Items — Medium** | How many rows to show on a medium widget |
-| **Max Items — Large** | How many rows to show on a large widget |
-| **List Style** | `bullet` or `numbered` |
+| `notion.token` | Your Notion integration secret (`secret_...`) |
+| `notion.databaseId` | 32-character ID from the Notion database URL |
+| `notion.apiVersion` | Notion API version header to send |
+| `widget.title` | Header text shown on the widget |
+| `widget.backgroundColor` | Color name or hex code |
+| `widget.textColor` | Color name or hex code |
+| `widget.maxItemsMedium` | Number of rows to show on a medium widget |
+| `widget.maxItemsLarge` | Number of rows to show on a large widget |
+| `widget.listStyle` | `bullet` or `numbered` |
 
 ### Color values
 
-Accepts a **color name** (case-insensitive) or a **hex code** (`#RRGGBB`):
+Use either a color name or a hex code like `#RRGGBB`.
+
+Supported names:
 
 `black` · `white` · `red` · `green` · `blue` · `orange` · `yellow` · `pink` · `purple` · `cyan` · `mint` · `teal` · `indigo` · `brown` · `gray` · `darkGray` · `lightGray`
+
+---
+
+## Notes
+
+- If the widget shows an error, double-check `widget-config.json` and confirm the Notion integration can access the target database.
+- This setup avoids App Groups, which makes the project easier to build without paid Apple Developer capabilities.
 
 ---
 

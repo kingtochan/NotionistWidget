@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A5A64105080292E58174739 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F404328B668C02151BF6DC3 /* TimelineItem.swift */; };
 		16B3719ABD60507AD39CF010 /* TimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F404328B668C02151BF6DC3 /* TimelineItem.swift */; };
+		1A2B3C4D5E6F708192A3B4C5 /* widget-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F708192A3B4C4 /* widget-config.json */; };
+		1A2B3C4D5E6F708192A3B4C6 /* widget-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F708192A3B4C4 /* widget-config.json */; };
 		667E9060AD16BF167D740ABC /* NotionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EC538E39A2977C0409B27E /* NotionService.swift */; };
 		8FBB321F50C2FF24D153DFA6 /* NotionistWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */; };
 		A0B1C2D3E4F5010203040508 /* WidgetConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */; };
@@ -44,14 +46,13 @@
 
 /* Begin PBXFileReference section */
 		2B104F7FBA308D765C8A0056 /* NotionistWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionistWidgetApp.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708192A3B4C4 /* widget-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "widget-config.json"; sourceTree = "<group>"; };
 		40EC538E39A2977C0409B27E /* NotionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionService.swift; sourceTree = "<group>"; };
 		56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionistWidget.swift; sourceTree = "<group>"; };
 		5F404328B668C02151BF6DC3 /* TimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItem.swift; sourceTree = "<group>"; };
 		A0B1C2D3E4F5010203040506 /* WidgetConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetConfig.swift; sourceTree = "<group>"; };
-		BB1122334455667788990011 /* NotionistWidgetApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotionistWidgetApp.entitlements; sourceTree = "<group>"; };
 		AB62090427D479E62994D1B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B1C2D3E4F501020304050601 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		F1A2B3C4D5E6789012345678 /* NotionistWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotionistWidget.entitlements; sourceTree = "<group>"; };
 		CFB4D0C4440C144A3E805286 /* NotionistWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotionistWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA7002E15D4B23C118E64DF5 /* NotionistWidgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotionistWidgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -67,9 +68,18 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		1A2B3C4D5E6F708192A3B4C7 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				1A2B3C4D5E6F708192A3B4C4 /* widget-config.json */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		5781D34D71AC8D8E39E06A0B = {
 			isa = PBXGroup;
 			children = (
+				1A2B3C4D5E6F708192A3B4C7 /* Config */,
 				06D4AD1A2294C38E6A3F715B /* Shared */,
 				B243A5446D2809755EC1963E /* NotionistWidgetApp */,
 				5CD3B63B444FD6A04332DBDB /* WidgetExtension */,
@@ -81,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				AB62090427D479E62994D1B7 /* Info.plist */,
-				F1A2B3C4D5E6789012345678 /* NotionistWidget.entitlements */,
 				56D61D82D65FF1752AE8A34A /* NotionistWidget.swift */,
 			);
 			path = WidgetExtension;
@@ -91,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				B1C2D3E4F501020304050601 /* Info.plist */,
-				BB1122334455667788990011 /* NotionistWidgetApp.entitlements */,
 				C1D2E3F40501020304050607 /* Sources */,
 			);
 			path = NotionistWidgetApp;
@@ -197,6 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B3C4D5E6F708192A3B4C5 /* widget-config.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +213,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B3C4D5E6F708192A3B4C6 /* widget-config.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +256,6 @@
 		44E44ED3694FEBD913A28655 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = WidgetExtension/NotionistWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WidgetExtension/Info.plist;
@@ -265,7 +274,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = NotionistWidgetApp/NotionistWidgetApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = NotionistWidgetApp/Info.plist;
@@ -403,7 +411,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = NotionistWidgetApp/NotionistWidgetApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = NotionistWidgetApp/Info.plist;
@@ -419,7 +426,6 @@
 		E6C78C880EDF8DAFF9074F08 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = WidgetExtension/NotionistWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WidgetExtension/Info.plist;

@@ -78,7 +78,7 @@ struct NotionistProvider: TimelineProvider {
                 let entry = NotionistEntry(
                     date: Date(),
                     items: [],
-                    errorMessage: "Open the Notionist Widget app and enter your Notion token and database ID. If you already saved them, your Xcode signing setup may not support App Groups.",
+                    errorMessage: "Edit Config/widget-config.json with your Notion token and database ID, then rebuild the app.",
                     title: w.title,
                     background: bg,
                     textColor: fg,
@@ -107,7 +107,7 @@ struct NotionistProvider: TimelineProvider {
                     let entry = NotionistEntry(
                         date: Date(),
                         items: [],
-                        errorMessage: "Failed to load Notion data.",
+                        errorMessage: "Failed to load Notion data. Check widget-config.json and confirm your Notion integration can access the database.",
                         title: w.title,
                         background: bg,
                         textColor: fg,

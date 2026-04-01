@@ -1,182 +1,110 @@
 import SwiftUI
 import WidgetKit
+#if canImport(AppKit)
+import AppKit
+#endif
 
 @main
 struct NotionistWidgetApp: App {
     var body: some Scene {
-        WindowGroup("Notionist Widget Settings") {
-            SettingsView()
+        WindowGroup("Notionist Widget") {
+            SetupView()
         }
-        .defaultSize(width: 540, height: 560)
+        .defaultSize(width: 620, height: 540)
     }
 }
 
-struct SettingsView: View {
-    // Notion
-    @State private var token        = ""
-    @State private var databaseId   = ""
-    @State private var apiVersion   = "2022-06-28"
-
-    // Widget display
-    @State private var widgetTitle      = "Notionist Widget"
-    @State private var backgroundColor  = "darkGray"
-    @State private var textColor        = "white"
-    @State private var maxItemsMedium   = 4
-    @State private var maxItemsLarge    = 8
-    @State private var listStyle        = WidgetListStyle.bullet
-
-    @State private var savedFeedback = false
+struct SetupView: View {
+    private let config = WidgetConfigLoader.load()
+    @State private var copiedExample = false
 
     var body: some View {
-        Form {
-            // MARK: Notion credentials
-            Section {
-                LabeledContent("Integration Token") {
-                    TextField("secret_xxxxxxxxxxxx", text: $token)
-                        .textFieldStyle(.roundedBorder)
-                        .labelsHidden()
-                }
-                LabeledContent("Database ID") {
-                    TextField("32-character ID from the Notion URL", text: $databaseId)
-                        .textFieldStyle(.roundedBorder)
-                        .labelsHidden()
-                }
-                LabeledContent("API Version") {
-                    TextField("2022-06-28", text: $apiVersion)
-                        .textFieldStyle(.roundedBorder)
-                        .labelsHidden()
-                        .frame(maxWidth: 140)
-                }
-            } header: {
-                Text("Notion").font(.headline)
-            }
-
-            // MARK: Widget display
-            Section {
-                LabeledContent("Widget Title") {
-                    TextField("Notionist Widget", text: $widgetTitle)
-                        .textFieldStyle(.roundedBorder)
-                        .labelsHidden()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Notionist Widget")
+                        .font(.largeTitle.bold())
+                    Text("This app is only the container for the widget. Configure `widget-config.json`, rebuild, then add the widget from macOS.")
+                        .foregroundStyle(.secondary)
                 }
 
-                colorRow(label: "Background Color",
-                         hint: "e.g. darkGray or #1C1C1E",
-                         value: $backgroundColor,
-                         preview: WidgetConfigLoader.backgroundColor(from: backgroundColor))
-
-                colorRow(label: "Text Color",
-                         hint: "e.g. white or #FFFFFF",
-                         value: $textColor,
-                         preview: WidgetConfigLoader.textColor(from: textColor))
-
-                LabeledContent("Max Items — Medium") {
-                    Stepper("\(maxItemsMedium)", value: $maxItemsMedium, in: 1...10)
-                }
-                LabeledContent("Max Items — Large") {
-                    Stepper("\(maxItemsLarge)", value: $maxItemsLarge, in: 1...20)
-                }
-
-                LabeledContent("List Style") {
-                    Picker("", selection: $listStyle) {
-                        ForEach(WidgetListStyle.allCases, id: \.self) { style in
-                            Text(style.rawValue.capitalized).tag(style)
-                        }
+                GroupBox("Bundled Configuration") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        configRow("Widget Title", value: config.widget.title)
+                        configRow("Database ID", value: displayValue(config.notion.databaseId))
+                        configRow("API Version", value: config.notion.apiVersion)
+                        configRow("Background Color", value: config.widget.backgroundColor)
+                        configRow("Text Color", value: config.widget.textColor ?? "white")
+                        configRow("Medium Items", value: "\(config.widget.maxItemsMedium)")
+                        configRow("Large Items", value: "\(config.widget.maxItemsLarge)")
+                        configRow("List Style", value: config.widget.listStyle.rawValue)
+                        configRow("Token", value: maskedToken(config.notion.token))
                     }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .frame(maxWidth: 180)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-            } header: {
-                Text("Widget Display").font(.headline)
-            } footer: {
-                Text("Color accepts a name (black, white, red, green, blue, orange, yellow, pink, purple, cyan, mint, teal, indigo, brown, gray, darkGray, lightGray) or a hex code (#RRGGBB).")
-                    .foregroundStyle(.secondary)
-                    .font(.caption)
-            }
 
-            // MARK: Actions
-            Section {
-                HStack(spacing: 16) {
-                    Button("Save & Reload Widget") {
-                        saveAndReload()
+                GroupBox("How To Update") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("1. Edit `Config/widget-config.json` in the project.")
+                        Text("2. Put in your Notion token, database ID, and display options.")
+                        Text("3. Build the `NotionistWidgetApp` target again.")
+                        Text("4. Add or refresh the widget on your desktop.")
                     }
-                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
 
-                    if savedFeedback {
-                        Label("Saved!", systemImage: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                            .transition(.opacity)
-                    }
-
-                    Spacer()
-
+                HStack(spacing: 12) {
                     Button("Reload Widget") {
                         WidgetCenter.shared.reloadAllTimelines()
                     }
+                    .buttonStyle(.borderedProminent)
+
+                    Button("Copy Example JSON") {
+                        copyExampleJSON()
+                    }
                     .buttonStyle(.bordered)
+
+                    if copiedExample {
+                        Text("Copied")
+                            .foregroundStyle(.green)
+                    }
                 }
             }
+            .padding(24)
         }
-        .formStyle(.grouped)
-        .padding(.vertical, 8)
-        .onAppear(perform: loadSettings)
     }
-
-    // MARK: - Color row helper
 
     @ViewBuilder
-    private func colorRow(label: String, hint: String, value: Binding<String>, preview: Color) -> some View {
-        LabeledContent(label) {
-            HStack(spacing: 8) {
-                TextField(hint, text: value)
-                    .textFieldStyle(.roundedBorder)
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(preview)
-                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.primary.opacity(0.15)))
-                    .frame(width: 28, height: 22)
-            }
+    private func configRow(_ label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    // MARK: - Persistence
-
-    private func loadSettings() {
-        let cfg = WidgetConfigLoader.load()
-        token           = cfg.notion.token
-        databaseId      = cfg.notion.databaseId
-        apiVersion      = cfg.notion.apiVersion
-        widgetTitle     = cfg.widget.title
-        backgroundColor = cfg.widget.backgroundColor
-        textColor       = cfg.widget.textColor ?? "white"
-        maxItemsMedium  = cfg.widget.maxItemsMedium
-        maxItemsLarge   = cfg.widget.maxItemsLarge
-        listStyle       = cfg.widget.listStyle
+    private func copyExampleJSON() {
+        guard let example = WidgetConfigLoader.bundledJSONExample() else { return }
+        #if canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(example, forType: .string)
+        #endif
+        copiedExample = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            copiedExample = false
+        }
     }
 
-    private func saveAndReload() {
-        let cfg = WidgetConfigFile(
-            notion: .init(
-                token:      token.trimmingCharacters(in: .whitespaces),
-                databaseId: databaseId.trimmingCharacters(in: .whitespaces),
-                apiVersion: apiVersion.trimmingCharacters(in: .whitespaces)
-            ),
-            widget: .init(
-                title:           widgetTitle,
-                backgroundColor: backgroundColor,
-                textColor:       textColor,
-                maxItemsMedium:  maxItemsMedium,
-                maxItemsLarge:   maxItemsLarge,
-                listStyle:       listStyle
-            )
-        )
-        WidgetConfigLoader.save(cfg)
-        WidgetCenter.shared.reloadAllTimelines()
+    private func displayValue(_ value: String) -> String {
+        value.isEmpty ? "Not set" : value
+    }
 
-        withAnimation {
-            savedFeedback = true
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            withAnimation { savedFeedback = false }
-        }
+    private func maskedToken(_ token: String) -> String {
+        guard !token.isEmpty else { return "Not set" }
+        guard token.count > 8 else { return String(repeating: "•", count: token.count) }
+        return "\(token.prefix(4))••••\(token.suffix(4))"
     }
 }
