@@ -24,7 +24,7 @@ struct SetupView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Notionist Widget")
                         .font(.largeTitle.bold())
-                    Text("This app is only the container for the widget. Configure `widget-config.json`, rebuild, then add the widget from macOS.")
+                    Text("This app is the container for the widget. Configure `widget-config.json`, build from Xcode, launch the built app once, then add the widget from macOS.")
                         .foregroundStyle(.secondary)
                 }
 
@@ -47,8 +47,17 @@ struct SetupView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("1. Edit `Config/widget-config.json` in the project.")
                         Text("2. Put in your Notion token, database ID, and display options.")
-                        Text("3. Build the `NotionistWidgetApp` target again.")
-                        Text("4. Add or refresh the widget on your desktop.")
+                        Text("3. Build and run the `NotionistWidgetApp` target from Xcode.")
+                        Text("4. If you move the app to `/Applications`, launch it once from there.")
+                        Text("5. Add or refresh the widget on your desktop.")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+
+                GroupBox("Widget Registration") {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("For the widget to appear in Edit Widgets, use the Xcode-built app.")
+                        Text("A compile-only build made with `CODE_SIGNING_ALLOWED=NO` is useful for verification, but macOS may not register its widget extension for the gallery.")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }

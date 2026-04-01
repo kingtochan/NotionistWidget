@@ -61,11 +61,14 @@ Open `Config/widget-config.json` and fill in your values before building:
 1. Open `NotionistWidget.xcodeproj` in Xcode.
 2. Select the **NotionistWidgetApp** scheme and **My Mac** as the destination.
 3. Build and run.
-4. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
+4. If you move the app to `/Applications`, launch it once from there.
+5. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
 
 If you change `widget-config.json`, rebuild the app so the updated config is bundled into the widget.
 
-**Option B — Command line**
+Use the Xcode-built app for real installation and widget registration. A compile-only command-line build with `CODE_SIGNING_ALLOWED=NO` is useful for verification, but macOS may not register its widget extension in the widget gallery.
+
+**Option B — Command line verification build**
 
 ```zsh
 xcodebuild \
@@ -77,7 +80,7 @@ xcodebuild \
   build
 ```
 
-The built app is written to Xcode's DerivedData folder.
+This command is mainly useful to verify that the project compiles. For actual widget installation and discovery in **Edit Widgets**, use the Xcode-built app from Option A.
 
 ---
 
@@ -166,6 +169,7 @@ Supported names:
 
 - If the widget shows an error, double-check `widget-config.json` and confirm the Notion integration can access the target database.
 - This setup avoids App Groups, which makes the project easier to build without paid Apple Developer capabilities.
+- If the widget does not appear in **Edit Widgets**, rebuild from Xcode, launch the built app once, and make sure the app bundle contains `Contents/PlugIns/NotionistWidgetExtension.appex`.
 
 ---
 
