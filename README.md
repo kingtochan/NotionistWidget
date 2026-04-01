@@ -97,7 +97,7 @@ This command is mainly useful to verify that the project compiles. For actual wi
 
 | Key | Description |
 |---|---|
-| `notion.token` | Your Notion integration secret, usually starting with `secret_` |
+| `notion.token` | Your Notion integration secret, usually starting with `ntn_` |
 | `notion.databaseId` | Database ID from the Notion URL |
 | `notion.apiVersion` | Notion API version header, for example `2022-06-28` |
 | `widget.title` | Any text shown as the widget header |
@@ -112,7 +112,7 @@ This command is mainly useful to verify that the project compiles. For actual wi
 #### `notion.token`
 
 - Use your Notion integration secret.
-- Example: `secret_xxxxxxxxxxxx`
+- Example: `ntn_xxxxxxxxxxxx`
 
 #### `notion.databaseId`
 
