@@ -78,7 +78,7 @@ struct NotionistProvider: TimelineProvider {
                 let entry = NotionistEntry(
                     date: Date(),
                     items: [],
-                    errorMessage: "Edit Shared/WidgetConfig.json with your Notion token and database ID, then rebuild.",
+                    errorMessage: "Open the Notionist Widget app and enter your Notion token and database ID.",
                     title: w.title,
                     background: bg,
                     textColor: fg,

@@ -8,3 +8,4 @@ DerivedData/
 build/
 *.moved-aside
 .DS_Store
+NotionistWidget-v*.zip
