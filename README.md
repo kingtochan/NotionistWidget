@@ -14,7 +14,7 @@ cd NotionistWidget
 2. Find the database ID in the URL of the database full page (either from the webpage URL or the share URL in Notion app). The ID is the chain between the last slash (/) and the question mark (?) in the URL.
 3. Edit **`Shared/WidgetConfig.json`**:
    - **`notion`**: `token`, `databaseId`, optional `apiVersion` (default `2022-06-28`).
-   - **`widget`**: `title`, `backgroundColorHex` (`#RRGGBB` or `#RRGGBBAA`), `maxItemsMedium`, `maxItemsLarge`, `listStyle` (`bullet` or `numbered`).
+   - **`widget`**: `title`, `backgroundColorHex` (`#RRGGBB` or `#RRGGBBAA` or `white`), `maxItemsMedium`, `maxItemsLarge`, `listStyle` (`bullet` or `numbered`).
 
 Values are **bundled at build time** — change the JSON, then rebuild.
 
