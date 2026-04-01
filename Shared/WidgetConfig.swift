@@ -4,8 +4,6 @@ import SwiftUI
 import AppKit
 #endif
 
-let appGroupID = "group.com.example.notionistwidget"
-
 enum WidgetListStyle: String, Codable, CaseIterable {
     case bullet
     case numbered
@@ -31,52 +29,69 @@ struct WidgetConfigFile {
     var widget: WidgetDisplay
 }
 
-enum WidgetConfigLoader {
-    private enum Keys {
-        static let notionToken      = "notionToken"
-        static let databaseId       = "databaseId"
-        static let apiVersion       = "apiVersion"
-        static let widgetTitle      = "widgetTitle"
-        static let backgroundColor  = "backgroundColor"
-        static let textColor        = "textColor"
-        static let maxItemsMedium   = "maxItemsMedium"
-        static let maxItemsLarge    = "maxItemsLarge"
-        static let listStyle        = "listStyle"
-    }
+// Codable mirror used for JSON persistence
+private struct WidgetConfigJSON: Codable {
+    var notionToken: String
+    var databaseId: String
+    var apiVersion: String
+    var widgetTitle: String
+    var backgroundColor: String
+    var textColor: String
+    var maxItemsMedium: Int
+    var maxItemsLarge: Int
+    var listStyle: String
+}
 
-    private static var defaults: UserDefaults {
-        UserDefaults(suiteName: appGroupID) ?? .standard
+enum WidgetConfigLoader {
+    /// Shared config file at a fixed path both the app and widget can access
+    /// without relying on App Group sandboxing (required for ad-hoc signed builds).
+    private static var configFileURL: URL {
+        let dir = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".notionistwidget", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir.appendingPathComponent("config.json")
     }
 
     static func load() -> WidgetConfigFile {
-        let ud = defaults
-        let notion = WidgetConfigFile.Notion(
-            token:      ud.string(forKey: Keys.notionToken)  ?? "",
-            databaseId: ud.string(forKey: Keys.databaseId)   ?? "",
-            apiVersion: ud.string(forKey: Keys.apiVersion)   ?? "2022-06-28"
+        guard
+            let data = try? Data(contentsOf: configFileURL),
+            let json = try? JSONDecoder().decode(WidgetConfigJSON.self, from: data)
+        else {
+            return .fallback
+        }
+        return WidgetConfigFile(
+            notion: .init(
+                token:      json.notionToken,
+                databaseId: json.databaseId,
+                apiVersion: json.apiVersion
+            ),
+            widget: .init(
+                title:           json.widgetTitle,
+                backgroundColor: json.backgroundColor,
+                textColor:       json.textColor,
+                maxItemsMedium:  json.maxItemsMedium,
+                maxItemsLarge:   json.maxItemsLarge,
+                listStyle:       WidgetListStyle(rawValue: json.listStyle) ?? .bullet
+            )
         )
-        let widget = WidgetConfigFile.WidgetDisplay(
-            title:           ud.string(forKey: Keys.widgetTitle)     ?? "Notionist Widget",
-            backgroundColor: ud.string(forKey: Keys.backgroundColor) ?? "darkGray",
-            textColor:       ud.string(forKey: Keys.textColor)       ?? "white",
-            maxItemsMedium:  ud.object(forKey: Keys.maxItemsMedium)  as? Int ?? 4,
-            maxItemsLarge:   ud.object(forKey: Keys.maxItemsLarge)   as? Int ?? 8,
-            listStyle:       WidgetListStyle(rawValue: ud.string(forKey: Keys.listStyle) ?? "bullet") ?? .bullet
-        )
-        return WidgetConfigFile(notion: notion, widget: widget)
     }
 
     static func save(_ config: WidgetConfigFile) {
-        let ud = defaults
-        ud.set(config.notion.token,             forKey: Keys.notionToken)
-        ud.set(config.notion.databaseId,        forKey: Keys.databaseId)
-        ud.set(config.notion.apiVersion,        forKey: Keys.apiVersion)
-        ud.set(config.widget.title,             forKey: Keys.widgetTitle)
-        ud.set(config.widget.backgroundColor,   forKey: Keys.backgroundColor)
-        ud.set(config.widget.textColor,         forKey: Keys.textColor)
-        ud.set(config.widget.maxItemsMedium,    forKey: Keys.maxItemsMedium)
-        ud.set(config.widget.maxItemsLarge,     forKey: Keys.maxItemsLarge)
-        ud.set(config.widget.listStyle.rawValue, forKey: Keys.listStyle)
+        let url = configFileURL
+        let json = WidgetConfigJSON(
+            notionToken:     config.notion.token,
+            databaseId:      config.notion.databaseId,
+            apiVersion:      config.notion.apiVersion,
+            widgetTitle:     config.widget.title,
+            backgroundColor: config.widget.backgroundColor,
+            textColor:       config.widget.textColor ?? "white",
+            maxItemsMedium:  config.widget.maxItemsMedium,
+            maxItemsLarge:   config.widget.maxItemsLarge,
+            listStyle:       config.widget.listStyle.rawValue
+        )
+        if let data = try? JSONEncoder().encode(json) {
+            try? data.write(to: url, options: .atomic)
+        }
     }
 
     static func backgroundColor(from value: String) -> Color {
@@ -95,6 +110,22 @@ enum WidgetConfigLoader {
         if let c = Color(hex: value) { return c }
         return .primary
     }
+}
+
+// MARK: - Fallback config
+
+private extension WidgetConfigFile {
+    static let fallback = WidgetConfigFile(
+        notion: .init(token: "", databaseId: "", apiVersion: "2022-06-28"),
+        widget: .init(
+            title:           "Notionist Widget",
+            backgroundColor: "darkGray",
+            textColor:       "white",
+            maxItemsMedium:  4,
+            maxItemsLarge:   8,
+            listStyle:       .bullet
+        )
+    )
 }
 
 // MARK: - Color helpers

@@ -4,15 +4,23 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 ---
 
-## Install — Prebuilt (no Xcode required)
+## Install — Build from Source (Recommended)
+
+Building from source is the recommended way to install. Xcode signs the app with your local developer identity automatically, which is required for the widget and host app to share settings correctly.
+
+See [Build from Source](#install--build-from-source) below.
+
+---
+
+## Install — Prebuilt
+
+> ⚠️ **Known limitation:** The prebuilt binary is ad-hoc signed with no Apple Team ID. Due to macOS sandbox restrictions, the widget extension may not be able to read settings saved by the host app. If the widget shows no items after setup, please use the [Build from Source](#install--build-from-source) method instead.
 
 1. Go to the [**Releases**](../../releases/latest) page and download the latest `NotionistWidget-v1.0.0.zip`.
 2. Unzip and move **NotionistWidgetApp.app** to your `/Applications` folder.
 3. **Right-click → Open** the app (required once — macOS blocks unsigned apps on a plain double-click).
 4. The settings window opens. Enter your Notion credentials and preferences, then click **Save & Reload Widget**.
 5. Right-click your desktop → **Edit Widgets** → search **Notionist** → add the widget.
-
-> **Why right-click → Open?** The prebuilt binary is ad-hoc signed but not notarized with Apple. This is a one-time step; after the first launch macOS remembers your choice.
 
 ---
 

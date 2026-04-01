@@ -47,11 +47,12 @@ struct NotionService {
             }
 
             let status: String?
-            if
-                let statusProperty = page.properties["Status"],
-                case let .select(selectObject) = statusProperty
-            {
-                status = selectObject?.name
+            if let statusProperty = page.properties["Status"] {
+                switch statusProperty {
+                case let .select(obj):  status = obj?.name
+                case let .status(obj):  status = obj?.name
+                default:                status = nil
+                }
             } else {
                 status = nil
             }
@@ -135,6 +136,7 @@ private enum NotionProperty: Codable {
     case title([NotionTitle])
     case date(NotionDate?)
     case select(NotionSelect?)
+    case status(NotionSelect?)
     case unsupported
 
     enum CodingKeys: String, CodingKey {
@@ -142,6 +144,7 @@ private enum NotionProperty: Codable {
         case title
         case date
         case select
+        case status
     }
 
     init(from decoder: Decoder) throws {
@@ -158,6 +161,9 @@ private enum NotionProperty: Codable {
         case "select":
             let select = try container.decodeIfPresent(NotionSelect.self, forKey: .select)
             self = .select(select)
+        case "status":
+            let status = try container.decodeIfPresent(NotionSelect.self, forKey: .status)
+            self = .status(status)
         default:
             self = .unsupported
         }
@@ -175,6 +181,9 @@ private enum NotionProperty: Codable {
         case .select(let select):
             try container.encode("select", forKey: .type)
             try container.encode(select, forKey: .select)
+        case .status(let status):
+            try container.encode("status", forKey: .type)
+            try container.encode(status, forKey: .status)
         case .unsupported:
             try container.encode("unsupported", forKey: .type)
         }
