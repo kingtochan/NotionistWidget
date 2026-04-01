@@ -19,7 +19,7 @@ The Xcode project is already configured to use local ad hoc signing, shown by Xc
 ### Step 0 — Clone the repository
 
 ```zsh
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/kingtochan/NotionistWidget)
 cd NotionistWidget
 ```
 
