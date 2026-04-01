@@ -8,7 +8,7 @@ Open-source macOS desktop widget that directly lists upcoming rows from a Notion
 
 This project is currently distributed as source only.
 
-I cannot provide a prebuilt signed `.app` because I do not have an Apple Developer account. If you want to use the widget, please build it locally in Xcode.
+Prebuilt signed `.app` is not included. If you want to use the widget, please build it locally in Xcode.
 
 ---
 
