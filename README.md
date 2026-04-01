@@ -93,7 +93,7 @@ The built app is written to Xcode's DerivedData folder.
 
 | Key | Description |
 |---|---|
-| `notion.token` | Your Notion integration secret, usually starting with `secret_` |
+| `notion.token` | Your Notion integration secret, usually starting with `ntn_` |
 | `notion.databaseId` | Database ID from the Notion URL |
 | `notion.apiVersion` | Notion API version header, for example `2022-06-28` |
 | `widget.title` | Any text shown as the widget header |
@@ -108,11 +108,11 @@ The built app is written to Xcode's DerivedData folder.
 #### `notion.token`
 
 - Use your Notion integration secret.
-- Example: `secret_xxxxxxxxxxxx`
+- Example: `ntn_xxxxxxxxxxxx`
 
 #### `notion.databaseId`
 
-- Use the database ID from your Notion database URL.
+- Use the database ID from your Notion database URL, between the last `/` and any `?`.
 - Example format: `0123456789abcdef0123456789abcdef`
 
 #### `notion.apiVersion`
@@ -165,7 +165,7 @@ Supported names:
 ## Notes
 
 - If the widget shows an error, double-check `widget-config.json` and confirm the Notion integration can access the target database.
-- This setup avoids App Groups, which makes the project easier to build without paid Apple Developer capabilities.
+- This setup avoids App Groups, which makes the project easier to build without Apple Developer Account.
 
 ---
 
