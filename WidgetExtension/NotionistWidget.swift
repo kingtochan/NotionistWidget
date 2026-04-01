@@ -7,6 +7,7 @@ struct NotionistEntry: TimelineEntry {
     let errorMessage: String?
     let title: String
     let background: Color
+    let textColor: Color
     let listStyle: WidgetListStyle
 }
 
@@ -38,7 +39,8 @@ struct NotionistProvider: TimelineProvider {
 
     func placeholder(in context: Context) -> NotionistEntry {
         let cfg = WidgetConfigLoader.load()
-        let bg = WidgetConfigLoader.backgroundColor(from: cfg.widget.backgroundColorHex)
+        let bg = WidgetConfigLoader.backgroundColor(from: cfg.widget.backgroundColor)
+        let fg = WidgetConfigLoader.textColor(from: cfg.widget.textColor)
         return NotionistEntry(
             date: Date(),
             items: [
@@ -48,6 +50,7 @@ struct NotionistProvider: TimelineProvider {
             errorMessage: nil,
             title: cfg.widget.title,
             background: bg,
+            textColor: fg,
             listStyle: cfg.widget.listStyle
         )
     }
@@ -60,7 +63,8 @@ struct NotionistProvider: TimelineProvider {
         Task {
             let cfg = WidgetConfigLoader.load()
             let w = cfg.widget
-            let bg = WidgetConfigLoader.backgroundColor(from: w.backgroundColorHex)
+            let bg = WidgetConfigLoader.backgroundColor(from: w.backgroundColor)
+            let fg = WidgetConfigLoader.textColor(from: w.textColor)
             let nextRefresh = Calendar.current.date(byAdding: .minute, value: 30, to: Date()) ?? Date().addingTimeInterval(1800)
 
             let n = cfg.notion
@@ -77,6 +81,7 @@ struct NotionistProvider: TimelineProvider {
                     errorMessage: "Edit Shared/WidgetConfig.json with your Notion token and database ID, then rebuild.",
                     title: w.title,
                     background: bg,
+                    textColor: fg,
                     listStyle: w.listStyle
                 )
                 timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
@@ -94,6 +99,7 @@ struct NotionistProvider: TimelineProvider {
                         errorMessage: nil,
                         title: w.title,
                         background: bg,
+                        textColor: fg,
                         listStyle: w.listStyle
                     )
                     timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
@@ -104,6 +110,7 @@ struct NotionistProvider: TimelineProvider {
                         errorMessage: "Failed to load Notion data.",
                         title: w.title,
                         background: bg,
+                        textColor: fg,
                         listStyle: w.listStyle
                     )
                     timeline = Timeline(entries: [entry], policy: .after(nextRefresh))
@@ -124,15 +131,16 @@ struct NotionistWidgetView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(entry.title)
                 .font(.headline)
+                .foregroundStyle(entry.textColor)
 
             if let errorMessage = entry.errorMessage {
                 Text(errorMessage)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(entry.textColor.opacity(0.6))
             } else if entry.items.isEmpty {
                 Text("No upcoming items.")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(entry.textColor.opacity(0.6))
             } else {
                 ForEach(Array(entry.items.enumerated()), id: \.element.id) { index, item in
                     HStack(alignment: .top, spacing: 8) {
@@ -141,9 +149,10 @@ struct NotionistWidgetView: View {
                             Text(item.name)
                                 .font(.subheadline)
                                 .lineLimit(1)
+                                .foregroundStyle(entry.textColor)
                             Text(subtitle(for: item))
                                 .font(.caption2)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(entry.textColor.opacity(0.6))
                         }
                     }
                 }
@@ -158,11 +167,12 @@ struct NotionistWidgetView: View {
         case .numbered:
             Text("\(index + 1).")
                 .font(.caption.weight(.medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(entry.textColor.opacity(0.6))
                 .frame(minWidth: 20, alignment: .trailing)
                 .padding(.top, 2)
         case .bullet:
             Circle()
+                .foregroundStyle(entry.textColor)
                 .frame(width: 7, height: 7)
                 .padding(.top, 6)
         }

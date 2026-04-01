@@ -18,7 +18,8 @@ struct WidgetConfigFile: Codable {
 
     struct WidgetDisplay: Codable {
         var title: String
-        var backgroundColorHex: String
+        var backgroundColor: String
+        var textColor: String?
         var maxItemsMedium: Int
         var maxItemsLarge: Int
         var listStyle: WidgetListStyle
@@ -42,13 +43,21 @@ enum WidgetConfigLoader {
         return decoded
     }
 
-    static func backgroundColor(from hex: String) -> Color {
-        if let c = Color(hex: hex) { return c }
+    static func backgroundColor(from value: String) -> Color {
+        if let c = Color(colorName: value) { return c }
+        if let c = Color(hex: value) { return c }
         #if canImport(AppKit)
         return Color(nsColor: .controlBackgroundColor)
         #else
         return Color.gray.opacity(0.2)
         #endif
+    }
+
+    static func textColor(from value: String?) -> Color {
+        guard let value else { return .primary }
+        if let c = Color(colorName: value) { return c }
+        if let c = Color(hex: value) { return c }
+        return .primary
     }
 }
 
@@ -57,7 +66,8 @@ private extension WidgetConfigFile {
         notion: .init(token: "", databaseId: "", apiVersion: "2022-06-28"),
         widget: WidgetDisplay(
             title: "Notionist Widget",
-            backgroundColorHex: "#EBEBF0",
+            backgroundColor: "darkGray",
+            textColor: "white",
             maxItemsMedium: 4,
             maxItemsLarge: 8,
             listStyle: .bullet
@@ -66,6 +76,32 @@ private extension WidgetConfigFile {
 }
 
 private extension Color {
+    // Supported color names (case-insensitive)
+    init?(colorName: String) {
+        switch colorName.lowercased().trimmingCharacters(in: .whitespaces) {
+        case "black":        self = .black
+        case "white":        self = .white
+        case "red":          self = .red
+        case "green":        self = .green
+        case "blue":         self = .blue
+        case "orange":       self = .orange
+        case "yellow":       self = .yellow
+        case "pink":         self = .pink
+        case "purple":       self = .purple
+        case "cyan":         self = .cyan
+        case "mint":         self = .mint
+        case "teal":         self = .teal
+        case "indigo":       self = .indigo
+        case "brown":        self = .brown
+        case "gray", "grey": self = .gray
+        case "darkgray", "darkgrey":
+            self = Color(red: 0.11, green: 0.11, blue: 0.12)   // #1C1C1E
+        case "lightgray", "lightgrey":
+            self = Color(red: 0.92, green: 0.92, blue: 0.94)   // #EBEBF0
+        default: return nil
+        }
+    }
+
     init?(hex: String) {
         var s = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         if s.hasPrefix("#") { s.removeFirst() }

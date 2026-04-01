@@ -6,7 +6,8 @@
   },
   "widget": {
     "title": "Notionist Widget",
-    "backgroundColorHex": "#EBEBF0",
+    "backgroundColor": "darkGray",
+    "textColor": "white",
     "maxItemsMedium": 4,
     "maxItemsLarge": 8,
     "listStyle": "bullet"
