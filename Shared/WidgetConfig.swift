@@ -44,11 +44,26 @@ enum WidgetConfigLoader {
         return normalized(config)
     }
 
-    static func bundledJSONExample(from bundle: Bundle = .main) -> String? {
-        guard
-            let url = bundle.url(forResource: fileName, withExtension: "json"),
-            let data = try? Data(contentsOf: url)
-        else {
+    static func exampleJSONTemplate() -> String? {
+        let example = WidgetConfigFile(
+            notion: .init(
+                token: "YOUR_NOTION_TOKEN_HERE",
+                databaseId: "YOUR_DATABASE_ID_HERE",
+                apiVersion: "2022-06-28"
+            ),
+            widget: .init(
+                title: "Notionist Widget",
+                backgroundColor: "darkGray",
+                textColor: "white",
+                maxItemsMedium: 4,
+                maxItemsLarge: 8,
+                listStyle: .bullet
+            )
+        )
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        guard let data = try? encoder.encode(example) else {
             return nil
         }
 

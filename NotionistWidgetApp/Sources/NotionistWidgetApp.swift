@@ -30,15 +30,18 @@ struct SetupView: View {
 
                 GroupBox("Bundled Configuration") {
                     VStack(alignment: .leading, spacing: 12) {
+                        Text("These values are from the config bundled into this build of the app.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                         configRow("Widget Title", value: config.widget.title)
-                        configRow("Database ID", value: displayValue(config.notion.databaseId))
+                        configRow("Database ID", value: maskedValue(config.notion.databaseId))
                         configRow("API Version", value: config.notion.apiVersion)
                         configRow("Background Color", value: config.widget.backgroundColor)
                         configRow("Text Color", value: config.widget.textColor ?? "white")
                         configRow("Medium Items", value: "\(config.widget.maxItemsMedium)")
                         configRow("Large Items", value: "\(config.widget.maxItemsLarge)")
                         configRow("List Style", value: config.widget.listStyle.rawValue)
-                        configRow("Token", value: maskedToken(config.notion.token))
+                        configRow("Token", value: maskedValue(config.notion.token))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -71,7 +74,7 @@ struct SetupView: View {
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Button("Copy Example JSON") {
+                    Button("Copy Template JSON") {
                         copyExampleJSON()
                     }
                     .buttonStyle(.bordered)
@@ -99,7 +102,7 @@ struct SetupView: View {
     }
 
     private func copyExampleJSON() {
-        guard let example = WidgetConfigLoader.bundledJSONExample() else { return }
+        guard let example = WidgetConfigLoader.exampleJSONTemplate() else { return }
         #if canImport(AppKit)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(example, forType: .string)
@@ -114,9 +117,9 @@ struct SetupView: View {
         value.isEmpty ? "Not set" : value
     }
 
-    private func maskedToken(_ token: String) -> String {
-        guard !token.isEmpty else { return "Not set" }
-        guard token.count > 8 else { return String(repeating: "•", count: token.count) }
-        return "\(token.prefix(4))••••\(token.suffix(4))"
+    private func maskedValue(_ value: String) -> String {
+        guard !value.isEmpty else { return "Not set" }
+        guard value.count > 8 else { return String(repeating: "•", count: value.count) }
+        return "\(value.prefix(4))••••\(value.suffix(4))"
     }
 }
