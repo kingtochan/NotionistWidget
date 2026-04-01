@@ -20,7 +20,7 @@ cd NotionistWidget
 
 ## Build
 
-No pre-built binary is provided. This project is designed to be built from source locally.
+No pre-built binary is provided. This project is designed to be easily built from source in local machine.
 
 ### Option A — Xcode (recommended)
 
