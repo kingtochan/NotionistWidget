@@ -4,6 +4,8 @@ import SwiftUI
 import AppKit
 #endif
 
+private let appGroupID = "group.com.example.notionistwidget"
+
 enum WidgetListStyle: String, Codable, CaseIterable {
     case bullet
     case numbered
@@ -29,69 +31,42 @@ struct WidgetConfigFile {
     var widget: WidgetDisplay
 }
 
-// Codable mirror used for JSON persistence
-private struct WidgetConfigJSON: Codable {
-    var notionToken: String
-    var databaseId: String
-    var apiVersion: String
-    var widgetTitle: String
-    var backgroundColor: String
-    var textColor: String
-    var maxItemsMedium: Int
-    var maxItemsLarge: Int
-    var listStyle: String
-}
-
 enum WidgetConfigLoader {
-    /// Shared config file at a fixed path both the app and widget can access
-    /// without relying on App Group sandboxing (required for ad-hoc signed builds).
-    private static var configFileURL: URL {
-        let dir = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent(".notionistwidget", isDirectory: true)
-        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        return dir.appendingPathComponent("config.json")
+    private static var defaults: UserDefaults? {
+        UserDefaults(suiteName: appGroupID)
     }
 
     static func load() -> WidgetConfigFile {
-        guard
-            let data = try? Data(contentsOf: configFileURL),
-            let json = try? JSONDecoder().decode(WidgetConfigJSON.self, from: data)
-        else {
-            return .fallback
-        }
+        guard let d = defaults else { return .fallback }
         return WidgetConfigFile(
             notion: .init(
-                token:      json.notionToken,
-                databaseId: json.databaseId,
-                apiVersion: json.apiVersion
+                token:      d.string(forKey: "notionToken")     ?? "",
+                databaseId: d.string(forKey: "databaseId")      ?? "",
+                apiVersion: d.string(forKey: "apiVersion")      ?? "2022-06-28"
             ),
             widget: .init(
-                title:           json.widgetTitle,
-                backgroundColor: json.backgroundColor,
-                textColor:       json.textColor,
-                maxItemsMedium:  json.maxItemsMedium,
-                maxItemsLarge:   json.maxItemsLarge,
-                listStyle:       WidgetListStyle(rawValue: json.listStyle) ?? .bullet
+                title:           d.string(forKey: "widgetTitle")       ?? "Notionist Widget",
+                backgroundColor: d.string(forKey: "backgroundColor")   ?? "darkGray",
+                textColor:       d.string(forKey: "textColor"),
+                maxItemsMedium:  d.integer(forKey: "maxItemsMedium") == 0 ? 4 : d.integer(forKey: "maxItemsMedium"),
+                maxItemsLarge:   d.integer(forKey: "maxItemsLarge")  == 0 ? 8 : d.integer(forKey: "maxItemsLarge"),
+                listStyle:       WidgetListStyle(rawValue: d.string(forKey: "listStyle") ?? "") ?? .bullet
             )
         )
     }
 
     static func save(_ config: WidgetConfigFile) {
-        let url = configFileURL
-        let json = WidgetConfigJSON(
-            notionToken:     config.notion.token,
-            databaseId:      config.notion.databaseId,
-            apiVersion:      config.notion.apiVersion,
-            widgetTitle:     config.widget.title,
-            backgroundColor: config.widget.backgroundColor,
-            textColor:       config.widget.textColor ?? "white",
-            maxItemsMedium:  config.widget.maxItemsMedium,
-            maxItemsLarge:   config.widget.maxItemsLarge,
-            listStyle:       config.widget.listStyle.rawValue
-        )
-        if let data = try? JSONEncoder().encode(json) {
-            try? data.write(to: url, options: .atomic)
-        }
+        guard let d = defaults else { return }
+        d.set(config.notion.token,      forKey: "notionToken")
+        d.set(config.notion.databaseId, forKey: "databaseId")
+        d.set(config.notion.apiVersion, forKey: "apiVersion")
+        d.set(config.widget.title,           forKey: "widgetTitle")
+        d.set(config.widget.backgroundColor, forKey: "backgroundColor")
+        d.set(config.widget.textColor ?? "white", forKey: "textColor")
+        d.set(config.widget.maxItemsMedium,  forKey: "maxItemsMedium")
+        d.set(config.widget.maxItemsLarge,   forKey: "maxItemsLarge")
+        d.set(config.widget.listStyle.rawValue, forKey: "listStyle")
+        d.synchronize()
     }
 
     static func backgroundColor(from value: String) -> Color {

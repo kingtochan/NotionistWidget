@@ -6,9 +6,9 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
-	<key>com.apple.security.temporary-exception.files.home-relative-path.read-only</key>
+	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>/.notionistwidget/</string>
+		<string>group.com.example.notionistwidget</string>
 	</array>
 </dict>
 </plist>
