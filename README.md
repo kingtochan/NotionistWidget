@@ -178,4 +178,4 @@ Supported names:
 
 ## Feedback and Contribution
 
-This project is intended to be a small, modular tool for the Notion community. Feedback is welcome. To suggest changes, please submit a pull request.
+This project is intended to be a small, modular tool for the Notion community. Feedback is welcome. To suggest changes, please submit a push request.
